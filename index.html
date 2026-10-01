@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#2e1f4d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<title>提携飲食店管理｜カラオケ・サービス券</title>
+<style>
+  :root{
+    --bg:#f5f3f9;
+    --surface:#ffffff;
+    --ink:#2a2140;
+    --muted:#6f6a85;
+    --line:#e6e2f0;
+    --aubergine:#2e1f4d;
+    --aubergine-deep:#241740;
+    --magenta:#d81b7c;
+    --magenta-dark:#a90f5e;
+    --magenta-soft:#fdf0f7;
+    --violet:#6d4bd6;
+    --amber:#b45309;
+    --amber-bg:#fdf1de;
+    --amber-line:#f3ddb8;
+    --green:#17754a;
+    --green-bg:#e7f5ee;
+    --danger:#c2382e;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(42,33,64,.06),0 6px 20px -8px rgba(42,33,64,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI","Meiryo",sans-serif;
+    font-size:15px;line-height:1.55;
+    min-height:100vh;
+  }
+  button{font-family:inherit;cursor:pointer}
+  input,textarea{font-family:inherit;font-size:16px}
+  a{color:var(--violet)}
+  [hidden]{display:none!important}
+
+  /* ---------- header ---------- */
+  .app-header{
+    background:linear-gradient(135deg,var(--aubergine-deep) 0%,var(--aubergine) 62%,#3d2a6b 100%);
+    color:#fff;
+    border-bottom:3px solid transparent;
+    border-image:linear-gradient(90deg,#ff4fa3,#8d5bff,#ff4fa3) 1;
+  }
+  .header-inner{
+    max-width:900px;margin:0 auto;
+    padding:14px 16px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}
+  .brand-mark{
+    width:44px;height:44px;flex:none;border-radius:12px;
+    background:linear-gradient(135deg,#ff4fa3,#8d5bff);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(216,27,124,.45);
+  }
+  .brand-mark svg{width:26px;height:26px;fill:#fff}
+  .brand h1{font-size:18px;font-weight:800;letter-spacing:.02em;line-height:1.2}
+  .brand-sub{font-size:11.5px;color:#c9bfe6;letter-spacing:.06em;margin-top:2px}
+  .header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .btn{
+    border:none;border-radius:10px;
+    padding:11px 18px;font-size:14.5px;font-weight:700;
+    display:inline-flex;align-items:center;gap:7px;justify-content:center;
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn-primary{
+    background:linear-gradient(135deg,#e9328d,#d81b7c);
+    color:#fff;box-shadow:0 4px 14px rgba(216,27,124,.4);
+  }
+  .btn-primary:hover{background:linear-gradient(135deg,#f03f98,#e02a85)}
+  .btn-ghost{
+    background:#fff;color:var(--aubergine);
+    border:1.5px solid var(--line);
+  }
+  .btn-ghost:hover{border-color:#c9c2de;background:#faf8ff}
+  .btn-plain{background:transparent;color:var(--muted);border:1.5px solid transparent}
+  .btn-plain:hover{color:var(--ink);background:#f0edf8}
+  .btn-danger{
+    background:#d6453b;color:#fff;box-shadow:0 3px 10px rgba(194,56,46,.35);
+  }
+  .btn-danger:hover{background:#e0554b}
+  .btn-danger-outline{
+    background:#fff;color:var(--danger);
+    border:1.5px solid #efc4c0;
+  }
+  .btn-danger-outline:hover{background:#fdf3f2;border-color:#e5a49e}
+  .btn-resume{
+    background:#fff;color:var(--green);
+    border:1.5px solid #bfe2cf;
+  }
+  .btn-resume:hover{background:#f2faf6}
+  .btn svg{width:17px;height:17px;flex:none}
+  .btn:focus-visible,.tab:focus-visible,.stub:focus-visible,.icon-btn:focus-visible,.chip:focus-visible{
+    outline:2px solid var(--violet);outline-offset:2px;
+  }
+  .gear{
+    width:42px;height:42px;flex:none;border:none;border-radius:10px;
+    background:rgba(255,255,255,.12);color:#e6dffb;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .gear:hover{background:rgba(255,255,255,.2);color:#fff}
+  .gear svg{width:21px;height:21px}
+
+  /* ---------- sync chip ---------- */
+  .chip{
+    border:none;border-radius:999px;
+    padding:7px 13px;font-size:12px;font-weight:800;
+    background:rgba(255,255,255,.14);color:#d9d2ee;
+    display:inline-flex;align-items:center;gap:6px;
+    max-width:100%;
+  }
+  .chip::before{
+    content:"";width:8px;height:8px;border-radius:50%;
+    background:#9a92b5;flex:none;
+  }
+  .chip-ok{background:rgba(46,204,133,.18);color:#a8eccd}
+  .chip-ok::before{background:#4ade97}
+  .chip-busy{background:rgba(141,91,255,.25);color:#d9cbff}
+  .chip-busy::before{background:#b79bff;animation:pulse 1s ease-in-out infinite}
+  .chip-warn{background:rgba(255,171,64,.18);color:#ffd9a3}
+  .chip-warn::before{background:#ffab40}
+  .chip-err{background:rgba(255,99,88,.2);color:#ffc4bf}
+  .chip-err::before{background:#ff6d61}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* ---------- layout ---------- */
+  main{max-width:900px;margin:0 auto;padding:16px 16px 60px}
+
+  /* ---------- tabs ---------- */
+  .tabs{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+    background:#ece8f5;border-radius:12px;padding:5px;
+    position:sticky;top:8px;z-index:20;
+    box-shadow:var(--shadow);
+  }
+  .tab{
+    border:none;background:transparent;border-radius:9px;
+    padding:9px 6px;font-size:13px;font-weight:700;color:var(--muted);
+    display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;
+  }
+  .tab .tab-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tab.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(42,33,64,.12)}
+  .count{
+    flex:none;min-width:22px;padding:1px 7px;border-radius:999px;
+    background:#e0daf0;color:var(--muted);
+    font-size:11.5px;font-weight:800;text-align:center;
+  }
+  .tab.is-active .count{background:var(--magenta-soft);color:var(--magenta-dark)}
+  .tab[data-tab="overdue"].is-active .count{background:var(--amber-bg);color:var(--amber)}
+  .tab[data-tab="ended"].is-active .count{background:#eee9e4;color:#8a8074}
+
+  .tab-desc{font-size:12.5px;color:var(--muted);margin:12px 2px 10px}
+
+  /* ---------- rows ---------- */
+  .rows{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .row{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px 16px;display:flex;gap:14px;align-items:flex-start;
+    box-shadow:var(--shadow);cursor:pointer;
+    transition:border-color .12s ease, transform .12s ease;
+  }
+  .row:hover{border-color:#cfc6e6}
+  .row:active{transform:scale(.995)}
+  .row.is-ended{background:#f6f4f1;border-color:#e4dfd7}
+  .row.is-ended .store{color:#7a7365}
+  .row-main{flex:1;min-width:0}
+  .store{font-size:15.5px;font-weight:800;line-height:1.35;word-break:break-word}
+  .note{
+    font-size:12.5px;color:var(--muted);margin-top:3px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    word-break:break-word;white-space:pre-line;
+  }
+  .dates{font-size:12px;color:var(--muted);margin-top:7px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+  .dates b{font-weight:700;color:#5a5473}
+  .badge{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;
+  }
+  .badge-warn{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-line)}
+  .badge-end{background:#eee9e4;color:#8a8074}
+  .row-side{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+  .thumbs{display:flex;gap:5px}
+  .thumb{
+    width:48px;height:48px;border-radius:8px;object-fit:cover;
+    border:1px solid var(--line);display:block;padding:0;background:#eee;
+  }
+  .thumb-more{
+    width:48px;height:48px;border-radius:8px;border:1px dashed #cfc6e6;
+    background:#f4f1fb;color:var(--muted);font-size:11px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .map-link{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:12px;font-weight:700;color:var(--violet);
+    text-decoration:none;border:1px solid #ddd3f2;border-radius:999px;padding:4px 11px;background:#fbfaff;
+  }
+  .map-link svg{width:13px;height:13px}
+  .map-link:hover{background:#f3eefc}
+
+  .stub{
+    position:relative;flex:none;
+    min-width:76px;padding:12px 13px;
+    border:1.5px dashed var(--magenta);border-radius:9px;
+    background:var(--magenta-soft);color:var(--magenta-dark);
+    font-size:14px;font-weight:800;letter-spacing:.03em;
+    line-height:1.2;
+  }
+  .stub small{display:block;font-size:9.5px;font-weight:700;letter-spacing:.12em;color:#c76aa2;margin-bottom:2px}
+  .stub::before,.stub::after{
+    content:"";position:absolute;width:9px;height:9px;border-radius:50%;
+    background:var(--bg);border:1.5px dashed var(--magenta);
+    top:50%;transform:translateY(-50%);
+  }
+  .stub::before{left:-6px}
+  .stub::after{right:-6px}
+  .row.is-ended .stub{border-color:#b7ac9c;color:#8a8074;background:#f1ede7}
+  .row.is-ended .stub::before,.row.is-ended .stub::after{border-color:#b7ac9c}
+  .stub:hover{filter:brightness(1.03)}
+
+  /* ---------- empty ---------- */
+  .empty{
+    text-align:center;padding:52px 20px;color:var(--muted);
+    background:var(--surface);border:1.5px dashed #d5cee8;border-radius:var(--radius);
+  }
+  .empty svg{width:40px;height:40px;fill:#cfc6e6;margin-bottom:10px}
+  .empty p{font-size:13.5px}
+
+  /* ---------- modal ---------- */
+  .overlay{
+    position:fixed;inset:0;z-index:50;
+    background:rgba(30,20,50,.55);
+    display:flex;align-items:flex-end;justify-content:center;
+    animation:fadeIn .18s ease;
+  }
+  .overlay.is-top{z-index:70}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .modal{
+    background:var(--surface);width:100%;max-width:580px;max-height:92vh;
+    border-radius:20px 20px 0 0;overflow-y:auto;
+    display:flex;flex-direction:column;
+    animation:slideUp .22s cubic-bezier(.2,.7,.3,1);
+  }
+  @keyframes slideUp{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+  @media (min-width:640px){
+    .overlay{align-items:center;padding:24px}
+    .modal{border-radius:18px}
+  }
+  .modal-head{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:16px 20px 12px;border-bottom:1px solid var(--line);
+    position:sticky;top:0;background:var(--surface);z-index:2;
+  }
+  .modal-head h2{font-size:16.5px;font-weight:800}
+  .icon-btn{
+    width:34px;height:34px;border:none;border-radius:50%;
+    background:#f1eef8;color:var(--muted);font-size:18px;line-height:1;
+    display:flex;align-items:center;justify-content:center;flex:none;
+  }
+  .icon-btn:hover{background:#e6e1f2;color:var(--ink)}
+  .modal-body{padding:16px 20px 8px;display:flex;flex-direction:column;gap:16px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .f-label{font-size:13px;font-weight:800;color:#4d4668;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .req{
+    font-style:normal;font-size:10.5px;font-weight:800;color:#fff;
+    background:var(--magenta);border-radius:5px;padding:1px 6px;
+  }
+  .hint{font-size:11.5px;font-weight:500;color:var(--muted)}
+  .f-meta{font-size:12px;color:var(--muted)}
+  .f-meta b{color:#4d4668}
+  input[type="text"],textarea,input[type="date"]{
+    border:1.5px solid var(--line);border-radius:10px;
+    padding:11px 13px;background:#fcfbfe;color:var(--ink);
+    width:100%;
+  }
+  textarea{resize:vertical;min-height:58px}
+  input:focus,textarea:focus{outline:none;border-color:var(--violet);background:#fff;box-shadow:0 0 0 3px rgba(109,75,214,.14)}
+  input.is-error{border-color:var(--danger);background:#fdf4f3}
+  .geo-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .geo-msg{font-size:12px;color:var(--muted)}
+  .geo-msg.is-error{color:var(--danger)}
+  .geo-result{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    background:#f6f2fd;border:1px solid #e2d8f6;border-radius:10px;padding:9px 12px;
+  }
+  .geo-result a{
+    font-size:12.5px;font-weight:700;color:var(--violet);word-break:break-all;
+    display:inline-flex;align-items:center;gap:5px;text-decoration:none;
+  }
+  .geo-result a svg{width:13px;height:13px;flex:none}
+  .geo-result a:hover{text-decoration:underline}
+  .mini{
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    font-size:11.5px;font-weight:700;border-radius:7px;padding:3px 9px;flex:none;
+  }
+  .mini:hover{color:var(--danger);border-color:#efc4c0}
+  .file-drop{
+    border:1.5px dashed #c9c0e2;border-radius:12px;background:#fbfaff;
+    padding:14px;text-align:center;font-size:13px;color:var(--violet);font-weight:700;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .file-drop:hover{background:#f4f0fc;border-color:var(--violet)}
+  .file-drop svg{width:18px;height:18px}
+  .thumbs-edit{display:flex;flex-wrap:wrap;gap:8px}
+  .thumb-wrap{position:relative}
+  .thumb-wrap img{width:76px;height:76px;border-radius:9px;object-fit:cover;border:1px solid var(--line);display:block}
+  .thumb-del{
+    position:absolute;top:-7px;right:-7px;width:22px;height:22px;border-radius:50%;
+    border:none;background:#2a2140;color:#fff;font-size:12px;line-height:1;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.3);
+  }
+  .visit-row{display:flex;gap:8px;align-items:center}
+  .visit-row input{width:150px;flex:none}
+  .modal-foot{
+    display:flex;align-items:center;gap:8px;
+    padding:14px 20px calc(16px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);
+    position:sticky;bottom:0;background:var(--surface);
+  }
+  .foot-right{margin-left:auto;display:flex;gap:8px}
+
+  /* ---------- settings modal ---------- */
+  .sec{
+    border:1px solid var(--line);border-radius:12px;
+    padding:14px;display:flex;flex-direction:column;gap:10px;
+  }
+  .sec-title{font-size:13.5px;font-weight:800;color:var(--aubergine)}
+  .sec p{font-size:12.5px;color:var(--muted)}
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#ece8f5;border-radius:10px;padding:4px}
+  .seg button{border:none;background:transparent;border-radius:8px;padding:8px 6px;font-size:12.5px;font-weight:800;color:var(--muted)}
+  .seg button.is-on{background:#fff;color:var(--aubergine);box-shadow:0 1px 4px rgba(42,33,64,.12)}
+  .gh-row{display:flex;gap:8px;flex-wrap:wrap}
+  .gh-row input{flex:1;min-width:160px;font-size:13px}
+  .details-link{color:var(--violet);font-weight:700}
+  .url-row{display:flex;gap:8px;flex-wrap:wrap}
+  .url-row input{flex:1;min-width:200px;font-size:13px}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+  .status-line{font-size:12.5px;color:var(--muted)}
+  .status-line b{color:#4d4668}
+  details.help{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fbfaff}
+  details.help summary{font-size:13px;font-weight:800;color:var(--violet);cursor:pointer}
+  details.help ol{margin:10px 0 10px 18px;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:5px}
+  details.help .warn{font-size:12px;color:var(--amber);font-weight:700}
+  .gas-code{
+    width:100%;height:200px;font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:11px;line-height:1.5;border:1.5px solid var(--line);border-radius:10px;
+    background:#f6f5fb;color:#3a3355;padding:10px;white-space:pre;overflow:auto;
+  }
+
+  /* ---------- lightbox ---------- */
+  .lightbox{
+    position:fixed;inset:0;z-index:80;background:rgba(15,10,28,.9);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+    padding:24px;cursor:zoom-out;animation:fadeIn .15s ease;
+  }
+  .lightbox img{max-width:100%;max-height:82vh;border-radius:10px;object-fit:contain}
+  .lightbox figcaption{color:#d8d2ea;font-size:13px}
+
+  /* ---------- toast ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(8px);
+    background:#2a2140;color:#fff;font-size:13.5px;font-weight:700;
+    padding:11px 20px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.3);
+    opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;z-index:90;
+    max-width:88vw;text-align:center;
+  }
+  .toast.is-show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (max-width:560px){
+    .row{padding:13px 13px;gap:10px}
+    .stub{min-width:64px;padding:10px 10px;font-size:12.5px}
+    .thumb{width:40px;height:40px}
+    .thumb-more{width:40px;height:40px}
+    .brand-sub{display:none}
+    .brand-mark{width:38px;height:38px}
+    .btn{padding:10px 14px;font-size:13.5px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-4 4v1.5a4 4 0 0 0-1.5 3.1v6.9a3.5 3.5 0 0 0 3.5 3.5h4a3.5 3.5 0 0 0 3.5-3.5v-6.9a4 4 0 0 0-1.5-3.1V6a4 4 0 0 0-4-4Zm-2.5 4a2.5 2.5 0 0 1 5 0v1h-5V6Zm5.5 3.6v1.6a.9.9 0 0 0 1.8 0v-.4c.4.5.7 1.1.7 1.8v.9h-1.4a.9.9 0 0 0 0 1.8h1.4v1.6h-1.4a.9.9 0 0 0 0 1.8h1.1a1.7 1.7 0 0 1-1.5.9h-4a1.7 1.7 0 0 1-1.7-1.7v-6.9c0-.7.3-1.3.7-1.8v.4a.9.9 0 0 0 1.8 0V9.6a2.5 2.5 0 0 1-1.9 0v7.7a.7.7 0 0 0 1.4 0v-2.5a.9.9 0 0 1 0 0Z"/></svg>
+      </div>
+      <div>
+        <h1>提携飲食店管理</h1>
+        <p class="brand-sub">カラオケ・サービス券 設置店舗リスト</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="chip" id="syncChip" type="button" title="共有の状態">未連携</button>
+      <button class="btn btn-primary" id="btnNew">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        新規登録
+      </button>
+      <button class="gear" id="btnSettings" type="button" aria-label="設定">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .32 1.77l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.6 1.6 0 0 0-1.77-.32 1.6 1.6 0 0 0-.97 1.47V21a2 2 0 1 1-4 0v-.09a1.6 1.6 0 0 0-1.05-1.47 1.6 1.6 0 0 0-1.77.32l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.6 1.6 0 0 0 4.6 15a1.6 1.6 0 0 0-1.47-.97H3a2 2 0 1 1 0-4h.09A1.6 1.6 0 0 0 4.56 9a1.6 1.6 0 0 0-.32-1.77l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.6 1.6 0 0 0 8.95 4.7 1.6 1.6 0 0 0 9.92 3.2V3a2 2 0 1 1 4 0v.09a1.6 1.6 0 0 0 .97 1.46 1.6 1.6 0 0 0 1.77-.32l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.6 1.6 0 0 0-.32 1.77v.08a1.6 1.6 0 0 0 1.47.97H21a2 2 0 1 1 0 4h-.09a1.6 1.6 0 0 0-1.47.97Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <nav class="tabs" id="tabs" aria-label="リスト切替">
+    <button class="tab is-active" data-tab="active"><span class="tab-label">提携中</span><span class="count" id="cActive">0</span></button>
+    <button class="tab" data-tab="overdue"><span class="tab-label">1ヶ月以上未訪問</span><span class="count" id="cOverdue">0</span></button>
+    <button class="tab" data-tab="ended"><span class="tab-label">提携終了</span><span class="count" id="cEnded">0</span></button>
+  </nav>
+  <p class="tab-desc" id="tabDesc">現在提携中の飲食店の一覧です。</p>
+  <ul class="rows" id="rows"></ul>
+</main>
+
+<!-- ======== 登録・編集モーダル ======== -->
+<div class="overlay" id="overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <header class="modal-head">
+      <h2 id="mTitle">新規登録</h2>
+      <button class="icon-btn" id="btnClose" type="button" aria-label="閉じる">×</button>
+    </header>
+    <div class="modal-body">
+      <div class="field">
+        <label class="f-label" for="fName">店舗名 <em class="req">必須</em></label>
+        <input type="text" id="fName" placeholder="例：居酒屋 富士見亭" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label class="f-label" for="fNote">備考 <span class="hint">定休日・訪問希望時間など</span></label>
+        <textarea id="fNote" rows="2" placeholder="例：定休日＝日曜／訪問希望時間＝15〜18時"></textarea>
+      </div>
+
+      <div class="field">
+        <span class="f-label">位置情報 <span class="hint">Googleマップのリンクを作成します</span></span>
+        <div class="geo-row">
+          <button class="btn btn-ghost" id="btnGeo" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            位置情報取得
+          </button>
+          <span class="geo-msg" id="geoMsg"></span>
+        </div>
+        <div class="geo-result" id="geoResult" hidden>
+          <a id="geoLink" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            <span id="geoLinkText"></span>
+          </a>
+          <button class="mini" id="btnGeoClear" type="button">リンクを削除</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="f-label">設置状況の写真 <span class="hint">サービス券を設置している様子（複数可）</span></span>
+        <label class="file-drop">
+          <input type="file" id="fPhotos" accept="image/*" multiple hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-2.5h6L17 7h3a1.5 1.5 0 0 1 1.5 1.5v10A1.5 1.5 0 0 1 20 20H4a1.5 1.5 0 0 1-1.5-1.5v-10A1.5 1.5 0 0 1 4 7Z"/><circle cx="12" cy="13" r="3.4"/></svg>
+          タップして写真を選択
+        </label>
+        <div class="thumbs-edit" id="photoThumbs"></div>
+      </div>
+
+      <div class="field" id="fieldVisit" hidden>
+        <label class="f-label" for="fVisit">最終訪問日 <span class="hint">ここから1ヶ月経つと「1ヶ月以上未訪問」に入ります</span></label>
+        <div class="visit-row">
+          <input type="date" id="fVisit">
+          <button class="btn btn-ghost" id="btnToday" type="button">今日にする</button>
+        </div>
+      </div>
+
+      <p class="f-meta" id="mMeta"></p>
+    </div>
+    <footer class="modal-foot">
+      <button class="btn btn-danger-outline" id="btnEnd" type="button" hidden>提携終了</button>
+      <button class="btn btn-resume" id="btnResume" type="button" hidden>提携を再開</button>
+      <button class="btn btn-danger" id="btnDelete" type="button" hidden>削除</button>
+      <div class="foot-right">
+        <button class="btn btn-plain" id="btnCancel" type="button">キャンセル</button>
+        <button class="btn btn-primary" id="btnSave" type="button">登録</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- ======== 設定（共有）モーダル ======== -->
+<div class="overlay is-top" id="settingsOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+    <header class="modal-head">
+      <h2 id="setTitle">設定・共有</h2>
+      <button class="icon-btn" id="btnSetClose" type="button" aria-label="閉じる">×</button>
+    </header>
+    <div class="modal-body">
+      <p class="status-line" id="sMeta"></p>
+
+      <div class="sec">
+        <span class="sec-title">複数端末で共有する（クラウド同期）</span>
+        <div class="seg" id="segMode">
+          <button type="button" data-mode="gas">GAS（Google）</button>
+          <button type="button" data-mode="gh">GitHub</button>
+        </div>
+        <div class="field" id="gasFields">
+          <p>PC・iPhone・Androidのどれでも、同じ「ウェブアプリURL」を開けば同じデータが見られます。準備は下の「共有の準備（GAS）」で行い、発行されたURLをここに貼り付けてください。</p>
+          <div class="url-row">
+            <input type="text" id="sUrl" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
+        <div class="field" id="ghFields" hidden>
+          <p>GitHubの<b>非公開リポジトリ</b>にデータファイルを置いて共有します。Google側の準備は不要です。リポジトリとトークンの作り方は下の「共有の準備（GitHub）」を見てください。</p>
+          <div class="gh-row">
+            <input type="text" id="gRepo" placeholder="リポジトリ（例：yourname/karaoke-data）" autocomplete="off" spellcheck="false">
+            <input type="text" id="gBranch" placeholder="ブランチ（main）" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="gh-row">
+            <input type="text" id="gPath" placeholder="ファイル名（karaoke_partner_db.json）" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="gh-row">
+            <input type="password" id="gToken" placeholder="アクセストークン（github_pat_…）" autocomplete="off">
+          </div>
+          <p class="hint">トークンはこの端末のブラウザにのみ保存されます。データ用リポジトリだけを操作できる「Fine-grained」トークン（Contents: Read and write）を使ってください（<a class="details-link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">トークン作成ページを開く</a>）。</p>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="btnSyncSave" type="button">保存して接続</button>
+          <button class="btn btn-ghost" id="btnSyncNow" type="button">今すぐ同期</button>
+          <button class="btn btn-plain" id="btnSyncOff" type="button">切り離す</button>
+        </div>
+        <p class="status-line" id="sStatus">—</p>
+        <p class="hint" id="sAuto">—</p>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="btnPushAll" type="button">この端末の全データを送信（修復）</button>
+        </div>
+        <p class="hint">同期エラー後や、別端末で作ったデータが消えてしまった場合の復旧に使います。</p>
+      </div>
+
+      <div class="sec">
+        <span class="sec-title">ファイルで共有・バックアップ</span>
+        <p>クラウド同期を使わない場合や、データのバックアップに。書き出したJSONファイルを別の端末で読み込めます。</p>
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="btnExport" type="button">書き出し</button>
+          <label class="btn btn-ghost" style="margin:0">
+            読み込み
+            <input type="file" id="importFile" accept=".json,application/json" hidden>
+          </label>
+        </div>
+      </div>
+
+      <details class="help">
+        <summary>共有の準備（GitHub・Google不要）</summary>
+        <ol>
+          <li>github.com で<b>データ用の非公開リポジトリ</b>を作ります：「New repository」→ 名前例 <b>karaoke-partner-data</b> → <b>Private</b> を選んで作成。店舗名や写真が入るため必ず非公開にします（アプリ本体のGitHub Pages用リポジトリとは別にします）。</li>
+          <li><a class="details-link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained personal access tokens の作成ページ</a>でトークンを作成：名前と有効期限を設定 →「Repository access」は「Only select repositories」で上のリポジトリだけを選択 →「Permissions」の <b>Contents を Read and write</b> に → 生成されたトークン（github_pat_…）をコピー（一度しか表示されません）。</li>
+          <li>上で「GitHub」タブを選び、リポジトリ／ブランチ（main）／ファイル名（既定）／トークンを入力 →「保存して接続」。データファイルは自動で作成されます。</li>
+          <li>他の端末では、同じアプリURLを開き、同じリポジトリと<b>端末ごとに発行したトークン</b>を入力すれば共有完了です。</li>
+        </ol>
+        <p class="warn">トークンを持つ人はデータを読み書きできます。人に渡さず、不要になったら GitHub のトークン一覧から失効させてください。</p>
+      </details>
+
+      <details class="help">
+        <summary>共有の準備（GAS・Googleドライブを使う場合）</summary>
+        <ol>
+          <li>このアプリのHTMLファイルをPCに保存します（配信された <b>karaoke-partner-manager.html</b>）。</li>
+          <li>drive.google.com を開き、「新規 → ファイルアップロード」でそのHTMLをアップロードします（ファイル名は <b>karaoke-partner-manager.html</b> のまま）。</li>
+          <li>script.google.com を開き「新しいプロジェクト」を作成 → エディタの既存コードをすべて消して、下のコードを貼り付けます。</li>
+          <li>右上「デプロイ」→「新しいデプロイ」→ 種類「ウェブアプリ」を選択。<br>「次のユーザーとして実行：自分」「アクセスできるユーザー：全員」にして「デプロイ」。</li>
+          <li>初回のみ承認を求められるので「アクセスを承認」→ 自分のアカウント → 「詳細」→「安全でないページに移動」→「許可」。</li>
+          <li>表示された<b>ウェブアプリのURL（末尾が /exec）</b>をコピー。各端末のブラウザでそのURLを開けばアプリが起動し、自動で同期がONになります。</li>
+        </ol>
+        <p class="warn">このURLを知っている人はデータを読み書きできます。関係者以外にはURLを共有しないでください。</p>
+        <p class="status-line" style="margin-top:6px">データの保存先はあなたのGoogleドライブ内の「karaoke_partner_db.json」です。アプリを更新したときは、ドライブ上のHTMLファイルを新しいものに上書きします。<br>※最初の同期は、データが入っている端末を先に接続して完了させてから、他の端末を接続してください。</p>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn btn-ghost" id="btnCopyGas" type="button">下のコードをコピー</button>
+        </div>
+        <textarea class="gas-code" id="gasCode" readonly spellcheck="false"></textarea>
+      </details>
+    </div>
+    <footer class="modal-foot">
+      <div class="foot-right">
+        <button class="btn btn-primary" id="btnSetDone" type="button">閉じる</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- ======== 写真拡大 ======== -->
+<figure class="lightbox" id="lightbox" hidden>
+  <img id="lightboxImg" alt="設置状況の写真">
+  <figcaption id="lightboxCap"></figcaption>
+</figure>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+
+/* =====================================================================
+   提携飲食店管理アプリ v2 — 複数端末共有対応
+   ===================================================================== */
+
+/* ---------- safe storage（環境によってはlocalStorageが使えない場合の代替） ---------- */
+var memStore = {};
+function lsGet(k) {
+  try { return localStorage.getItem(k); } catch (e) { return (k in memStore) ? memStore[k] : null; }
+}
+function lsSet(k, v) {
+  try { localStorage.setItem(k, v); return true; } catch (e) { memStore[k] = v; return false; }
+}
+
+/* ---------- keys ---------- */
+var STORE_KEY   = "karaoke_partners_v1";   // データ本体（v1から同一キー: 旧データは自動引継ぎ）
+var SYNC_KEY    = "karaoke_sync_url_v1";   // 同期先URL
+var DIRTY_KEY   = "karaoke_dirty_v1";      // 未送信レコードのkey一覧
+var LASTSYNC_KEY = "karaoke_lastsync_v1";
+
+/* ---------- state ---------- */
+var records = [];
+try { records = JSON.parse(lsGet(STORE_KEY) || "[]") || []; } catch (e) { records = []; }
+var dirty = [];
+try { dirty = JSON.parse(lsGet(DIRTY_KEY) || "[]") || []; } catch (e) { dirty = []; }
+var syncUrl = lsGet(SYNC_KEY) || "";
+if (!syncUrl && typeof window !== "undefined" && typeof window.__SYNC_URL__ === "string" && window.__SYNC_URL__) {
+  syncUrl = window.__SYNC_URL__;  // GASで配信された場合は自動設定
+}
+
+/* GitHub同期の設定（トークンはこの端末のブラウザ内にのみ保存される） */
+var MODE_KEY = "karaoke_sync_mode_v1";
+var GH_KEY   = "karaoke_gh_cfg_v1";
+var ghCfg = { repo: "", branch: "main", path: "karaoke_partner_db.json", token: "" };
+try {
+  var ghSaved = JSON.parse(lsGet(GH_KEY) || "{}");
+  if (ghSaved && typeof ghSaved === "object") {
+    if (typeof ghSaved.repo === "string") ghCfg.repo = ghSaved.repo;
+    if (typeof ghSaved.branch === "string" && ghSaved.branch) ghCfg.branch = ghSaved.branch;
+    if (typeof ghSaved.path === "string" && ghSaved.path) ghCfg.path = ghSaved.path;
+    if (typeof ghSaved.token === "string") ghCfg.token = ghSaved.token;
+  }
+} catch (e) {}
+var syncMode = lsGet(MODE_KEY) || "";
+if (!syncMode) {
+  syncMode = (ghCfg.repo && ghCfg.token) ? "gh" : (syncUrl ? "gas" : "");
+}
+var syncing = false;
+var lastError = false;
+var lastSyncAt = null;
+var seqCounter = 0;
+
+/* ---------- helpers ---------- */
+function pad3(n) { return String(n).padStart(3, "0"); }
+function pad2(n) { return String(n).padStart(2, "0"); }
+function fmtDate(s) { return s ? String(s).replace(/-/g, "/") : "—"; }
+function todayStr() {
+  var d = new Date();
+  return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+}
+function nowIso() { return new Date().toISOString(); }
+function daysSince(dateStr) {
+  var d = new Date(dateStr + "T00:00:00");
+  var t = new Date(); t.setHours(0, 0, 0, 0);
+  return Math.floor((t - d) / 86400000);
+}
+/* 最終訪問日から1ヶ月以上経過しているか（暦で1ヶ月加算して比較） */
+function overOneMonth(dateStr) {
+  if (!dateStr) return false;
+  var d = new Date(dateStr + "T00:00:00");
+  var limit = new Date(d); limit.setMonth(limit.getMonth() + 1);
+  var t = new Date(); t.setHours(0, 0, 0, 0);
+  return limit <= t;
+}
+function escapeHtml(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+function newKey() {
+  seqCounter = (seqCounter + 1) % 1000;
+  return "k" + Date.now().toString(36) + "-" + seqCounter.toString(36) + "-" + Math.random().toString(36).slice(2, 6);
+}
+function byKey(key) {
+  for (var i = 0; i < records.length; i++) if (records[i].key === key) return records[i];
+  return null;
+}
+function maxNo() {
+  var m = 0;
+  records.forEach(function (r) { if ((r.no || 0) > m) m = r.no; });
+  return m;
+}
+function persistDirty() { lsSet(DIRTY_KEY, JSON.stringify(dirty)); }
+function markDirty(key) {
+  if (dirty.indexOf(key) === -1) { dirty.push(key); persistDirty(); }
+}
+function touch(r) {
+  r.updatedAt = nowIso();
+  markDirty(r.key);
+  setChip();
+}
+/* IndexedDB（写真込みのデータ本体を保存。容量上限が実質なくなる） */
+var idbDb = null;
+function idbSave() {
+  try {
+    if (!window.indexedDB) return false;
+    var payload = { records: records };
+    var write = function (db) {
+      try {
+        var tx = db.transaction("kv", "readwrite");
+        tx.objectStore("kv").put(payload, "records");
+        tx.onabort = function () {
+          alert("データの保存に失敗しました（端末ストレージの空き容量が足りません）。");
+        };
+      } catch (e2) {}
+    };
+    if (idbDb && idbDb.objectStoreNames && idbDb.objectStoreNames.contains("kv")) {
+      write(idbDb);
+    } else {
+      var req = indexedDB.open("karaoke_partner_db", 1);
+      req.onupgradeneeded = function () { req.result.createObjectStore("kv"); };
+      req.onsuccess = function () { idbDb = req.result; write(idbDb); };
+      req.onerror = function () {};
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+function saveStorage(silent) {
+  if (idbSave()) {
+    /* データ本体をIndexedDBへ移行できた環境では、旧localStorageのコピーを掃除して
+       5MBの枠を解放する（設定類のみlocalStorageを使う） */
+    try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+    return true;
+  }
+  var ok = lsSet(STORE_KEY, JSON.stringify(records));
+  if (!ok && !silent) {
+    alert("保存に失敗しました。ブラウザの保存容量（約5MB）を超えている可能性があります。写真の枚数を減らしてお試しください。");
+  }
+  return ok;
+}
+function loadRecords(done) {
+  var doneOnce = false;
+  var finish = function () { if (!doneOnce) { doneOnce = true; done(); } };
+  if (!window.indexedDB) { finish(); return; }
+  try {
+    var req = indexedDB.open("karaoke_partner_db", 1);
+    req.onupgradeneeded = function () { req.result.createObjectStore("kv"); };
+    req.onsuccess = function () {
+      idbDb = req.result;
+      try {
+        var tx = idbDb.transaction("kv", "readonly");
+        var g = tx.objectStore("kv").get("records");
+        g.onsuccess = function () {
+          if (g.result && g.result.records) {
+            records = g.result.records;   /* IndexedDBに新しくあればそちらを優先 */
+          }
+          finish();  /* 空ならlocalStorageから読み込み済みの値のまま → 次回保存時に移行 */
+        };
+        g.onerror = finish;
+      } catch (e) { finish(); }
+    };
+    req.onerror = finish;
+    req.onblocked = finish;
+  } catch (e) { finish(); }
+}
+
+/* ---------- 移行（v1のデータ: 数値id のみ → key/no/updatedAt を付与） ---------- */
+function migrate() {
+  var changed = false;
+  records.forEach(function (r) {
+    if (!r.key) { r.key = "m" + (r.id != null ? r.id : maxNo() + 1); changed = true; }
+    if (r.no == null) { r.no = (r.id != null ? r.id : maxNo() + 1); changed = true; }
+    if (!r.updatedAt) { r.updatedAt = nowIso(); markDirty(r.key); changed = true; }
+  });
+  if (changed) saveStorage(true);
+}
+
+/* ---------- 管理番号の重複解消（複数端末で同時作成されても deterministic に） ---------- */
+function dedupeNos() {
+  var sorted = records.slice().sort(function (a, b) {
+    return (a.no || 0) - (b.no || 0)
+      || String(a.updatedAt || "").localeCompare(String(b.updatedAt || ""))
+      || String(a.key).localeCompare(String(b.key));
+  });
+  var used = {};
+  var next = maxNo() + 1;
+  var changed = false;
+  sorted.forEach(function (r) {
+    if (used[r.no]) {
+      r.no = next++;
+      r.updatedAt = nowIso();
+      markDirty(r.key);
+      changed = true;
+    } else {
+      used[r.no] = true;
+    }
+  });
+  if (changed) saveStorage(true);
+}
+
+/* ---------- 管理番号の詰め直し（削除後に1から順に並べ替える） ----------
+   全端末が同じ「並び順のルール」でローカル再計算するため、
+   番号を同期で送り合わなくても各端末で同じ番号に収束する。 */
+function renumberAll() {
+  var alive = records.filter(function (r) { return !r.deleted; });
+  alive.sort(function (a, b) {
+    return (a.no || 0) - (b.no || 0)
+      || String(a.updatedAt || "").localeCompare(String(b.updatedAt || ""))
+      || String(a.key).localeCompare(String(b.key));
+  });
+  alive.forEach(function (r, i) { r.no = i + 1; });
+}
+
+/* ---------- サーバとのマージ（新しい updatedAt を優先） ---------- */
+function mergeFromServer(serverRecs) {
+  (serverRecs || []).forEach(function (s) {
+    if (!s || !s.key) return;
+    var l = byKey(s.key);
+    if (!l) {
+      records.push(s);
+    } else if (String(s.updatedAt || "") > String(l.updatedAt || "")) {
+      var merged = {};
+      Object.keys(l).forEach(function (k) { merged[k] = l[k]; });
+      Object.keys(s).forEach(function (k) { merged[k] = s[k]; });
+      for (var k2 in merged) { l[k2] = merged[k2]; }
+    }
+  });
+  dedupeNos();
+  renumberAll();
+  saveStorage(true);
+  render();
+}
+
+/* =====================================================================
+   同期エンジン
+   ===================================================================== */
+function fetchJson(url, opts) {
+  var ctrl = (typeof AbortController === "function") ? new AbortController() : null;
+  var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 25000) : null;
+  var p = opts ? opts : {};
+  if (ctrl) p.signal = ctrl.signal;
+  return fetch(url, p).then(function (res) {
+    if (timer) clearTimeout(timer);
+    return res.text();
+  }).then(function (text) {
+    var data;
+    try { data = JSON.parse(text); } catch (e) {
+      throw new Error("応答が不正です。ウェブアプリのURL（末尾 /exec）と、アクセス権が「全員」か確認してください");
+    }
+    return data;
+  });
+}
+/* ---------- base64（日本語・写真データをUTF-8のまま安全に変換） ---------- */
+function b64encodeUtf8(str) {
+  var bytes = new TextEncoder().encode(String(str));
+  var bin = "", CH = 0x8000;
+  for (var i = 0; i < bytes.length; i += CH) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+  }
+  return btoa(bin);
+}
+function b64decodeUtf8(b64) {
+  var bin = atob(String(b64).replace(/\s/g, ""));
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+/* ---------- GitHub Contents API ---------- */
+function ghHeaders() {
+  return {
+    "Authorization": "Bearer " + ghCfg.token,
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+  };
+}
+function ghApiUrl() {
+  var seg = ghCfg.path.split("/").map(function (s) { return encodeURIComponent(s); }).join("/");
+  return "https://api.github.com/repos/" + ghCfg.repo + "/contents/" + seg;
+}
+function ghReq(url, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({}, ghHeaders(), opts.headers || {});
+  opts.cache = "no-store";
+  var ctrl = (typeof AbortController === "function") ? new AbortController() : null;
+  var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 30000) : null;
+  if (ctrl) opts.signal = ctrl.signal;
+  return fetch(url, opts).then(function (res) {
+    if (timer) clearTimeout(timer);
+    return res.json().catch(function () { return {}; }).then(function (json) {
+      return { status: res.status, ok: res.ok, json: json };
+    });
+  });
+}
+function ghReadDb() {  /* → { sha, db } ファイル未作成なら { sha: null, db: {records: []} } */
+  var url = ghApiUrl() + "?ref=" + encodeURIComponent(ghCfg.branch || "main") + "&t=" + Date.now();
+  return ghReq(url).then(function (r) {
+    if (r.status === 404) return { sha: null, db: { records: [] } };
+    if (r.status === 401) throw new Error("GitHubトークンが無効です（期限切れ・権限不足）");
+    if (r.status === 403) throw new Error("GitHub APIの権限またはレート制限エラーです");
+    if (!r.ok) throw new Error("GitHub接続エラー（HTTP " + r.status + "）リポジトリ名を確認してください");
+    var meta = r.json;
+    if (meta.content && meta.encoding === "base64") {
+      return { sha: meta.sha, db: JSON.parse(b64decodeUtf8(meta.content)) };
+    }
+    /* 1MB超のファイルは meta.content が空になるため blob API で取得する */
+    return ghReq(meta.git_url).then(function (b) {
+      if (!b.ok) throw new Error("データの取得に失敗しました（HTTP " + b.status + "）");
+      return { sha: meta.sha, db: JSON.parse(b64decodeUtf8(b.json.content || "")) };
+    });
+  });
+}
+function ghWriteDb(db, sha) {  /* → { sha }。他端末が先に書いた場合(409)は Error("conflict") */
+  var body = {
+    message: "update partner data (" + nowIso() + ")",
+    content: b64encodeUtf8(JSON.stringify(db)),
+    branch: ghCfg.branch || "main"
+  };
+  if (sha) body.sha = sha;
+  return ghReq(ghApiUrl(), { method: "PUT", body: JSON.stringify(body) }).then(function (r) {
+    if (r.status === 409) throw new Error("conflict");
+    if (r.status === 401) throw new Error("GitHubトークンが無効です（期限切れ・権限不足）");
+    if (r.status === 403) throw new Error("GitHub APIの権限またはレート制限エラーです");
+    if (r.status === 404) throw new Error("リポジトリが見つからないか、トークンにContents権限がありません");
+    if (!r.ok) throw new Error("書き込みに失敗しました（HTTP " + r.status + "）");
+    return { sha: (r.json.content && r.json.content.sha) ? r.json.content.sha : null };
+  });
+}
+function ghApi(action, recs) {
+  if (action === "list") {
+    return ghReadDb().then(function (r) {
+      return { ok: true, records: r.db.records || [] };
+    });
+  }
+  /* save: 最新ファイルを読んで未送信データだけをマージし、書き戻す（競合時は3回再試行） */
+  function attempt(n) {
+    return ghReadDb().then(function (r) {
+      var map = {};
+      (r.db.records || []).forEach(function (x) { if (x && x.key) map[x.key] = x; });
+      (recs || []).forEach(function (x) {
+        if (!x || !x.key) return;
+        var cur = map[x.key];
+        if (!cur || String(cur.updatedAt || "") < String(x.updatedAt || "")) map[x.key] = x;
+      });
+      var merged = Object.keys(map).map(function (k) { return map[k]; });
+      return ghWriteDb({ records: merged }, r.sha);
+    }).catch(function (err) {
+      if (err && err.message === "conflict" && n < 3) return attempt(n + 1);
+      throw err;
+    });
+  }
+  return attempt(0).then(function () { return { ok: true }; });
+}
+
+function api(action, recs) {
+  if (syncMode === "gh") return ghApi(action, recs);
+  if (action === "list") {
+    var sep = syncUrl.indexOf("?") > -1 ? "&" : "?";
+    return fetchJson(syncUrl + sep + "action=list&t=" + Date.now());
+  }
+  return fetchJson(syncUrl, {
+    method: "POST",
+    body: JSON.stringify({ action: "saveAll", records: recs })
+  });
+}
+
+function syncNow(manual) {
+  lastSyncTry = Date.now();
+  if (!isConnected()) { if (manual) openSettings(); return; }
+  if (syncing) return;
+  syncing = true;
+  lastError = false;
+  setChip();
+  api("list").then(function (res) {
+    if (!res || res.ok === false) throw new Error((res && res.error) ? res.error : "サーバーエラー");
+    mergeFromServer(res.records || []);
+    var dirtyRecs = records.filter(function (r) { return dirty.indexOf(r.key) > -1; });
+    if (!dirtyRecs.length) return null;
+    var snap = {};
+    dirtyRecs.forEach(function (r) { snap[r.key] = r.updatedAt; });
+    return api("save", dirtyRecs).then(function (res2) {
+      if (res2 && res2.ok === false) throw new Error(res2.error || "送信エラー");
+      /* 送信中にさらに編集されたレコードは未送信のまま残す */
+      dirty = dirty.filter(function (k) {
+        var r = byKey(k);
+        return !(r && snap[k] === r.updatedAt);
+      });
+      persistDirty();
+      return null;
+    });
+  }).then(function () {
+    lastSyncAt = new Date();
+    lsSet(LASTSYNC_KEY, lastSyncAt.toISOString());
+    if (manual) toast("同期しました（全" + records.length + "件）");
+  }).catch(function (err) {
+    lastError = true;
+    setChip();
+    if (manual) toast("同期できませんでした：" + (err && err.message ? err.message : "通信エラー"));
+  }).then(function () {
+    syncing = false;
+    setChip();
+    render();
+  });
+}
+
+/* =====================================================================
+   接続状態と自動同期（定期・表示時・フォーカス時・回線復帰時）
+   ===================================================================== */
+function isConnected() {
+  if (syncMode === "gh") return !!(ghCfg.repo && ghCfg.token);
+  return !!syncUrl;
+}
+
+var AUTO_SYNC_MS = 60000;   // 定期同期の間隔（60秒）
+var MIN_GAP_MS = 15000;     // 連続実行を防ぐ最小間隔
+var lastSyncTry = 0;
+
+function autoSync() {
+  if (!isConnected() || syncing) return;
+  var now = Date.now();
+  if (now - lastSyncTry < MIN_GAP_MS) return;
+  lastSyncTry = now;
+  syncNow(false);
+}
+setInterval(autoSync, AUTO_SYNC_MS);
+window.addEventListener("focus", autoSync);
+document.addEventListener("visibilitychange", function () {
+  if (!document.hidden) autoSync();
+});
+window.addEventListener("online", autoSync);
+
+/* =====================================================================
+   DOM
+   ===================================================================== */
+var $ = function (id) { return document.getElementById(id); };
+var rowsEl = $("rows"), tabDescEl = $("tabDesc");
+var overlay = $("overlay"), settingsOverlay = $("settingsOverlay");
+
+/* ---------- 同期状態チップ ---------- */
+function setChip() {
+  var el = $("syncChip");
+  if (!isConnected()) { el.textContent = "未連携"; el.className = "chip"; return; }
+  if (syncing) { el.textContent = "同期中…"; el.className = "chip chip-busy"; return; }
+  if (lastError) {
+    el.textContent = dirty.length ? "同期エラー（未送信" + dirty.length + "件）" : "同期エラー";
+    el.className = "chip chip-err";
+    return;
+  }
+  if (dirty.length) { el.textContent = "未送信 " + dirty.length + "件"; el.className = "chip chip-warn"; return; }
+  if (lastSyncAt) {
+    el.textContent = "同期済み " + pad2(lastSyncAt.getHours()) + ":" + pad2(lastSyncAt.getMinutes());
+  } else {
+    el.textContent = "接続済み";
+  }
+  el.className = "chip chip-ok";
+}
+
+/* ---------- 一覧描画 ---------- */
+function counts() {
+  var active = 0, overdue = 0, ended = 0;
+  records.forEach(function (r) {
+    if (r.deleted) return;
+    if (r.ended) { ended++; return; }
+    active++;
+    if (overOneMonth(r.lastVisitDate)) overdue++;
+  });
+  $("cActive").textContent = active;
+  $("cOverdue").textContent = overdue;
+  $("cEnded").textContent = ended;
+}
+
+function visibleRecords() {
+  var list = records.filter(function (r) {
+    if (r.deleted) return false;
+    if (currentTab === "active") return !r.ended;
+    if (currentTab === "overdue") return !r.ended && overOneMonth(r.lastVisitDate);
+    return r.ended;
+  });
+  if (currentTab === "active") list.sort(function (a, b) { return (a.no || 0) - (b.no || 0); });
+  if (currentTab === "overdue") list.sort(function (a, b) {
+    return a.lastVisitDate < b.lastVisitDate ? -1 : (a.lastVisitDate > b.lastVisitDate ? 1 : (a.no || 0) - (b.no || 0));
+  });
+  if (currentTab === "ended") list.sort(function (a, b) { return String(b.endedDate || "").localeCompare(String(a.endedDate || "")); });
+  return list;
+}
+
+function thumbHtml(rec) {
+  var max = 3;
+  var html = (rec.photos || []).slice(0, max).map(function (p, i) {
+    return '<button class="thumb-btn" type="button" data-photo="' + i + '" aria-label="写真を拡大">' +
+      '<img class="thumb" src="' + p + '" alt="設置状況の写真' + (i + 1) + '"></button>';
+  }).join("");
+  if ((rec.photos || []).length > max) html += '<span class="thumb-more">+' + (rec.photos.length - max) + "</span>";
+  return html ? '<div class="thumbs">' + html + "</div>" : "";
+}
+
+function rowHtml(r) {
+  var overdue = !r.ended && overOneMonth(r.lastVisitDate);
+  var badges = "";
+  if (r.ended) {
+    badges = '<span class="badge badge-end">提携終了：' + fmtDate(r.endedDate) + "</span>";
+  } else if (overdue) {
+    badges = '<span class="badge badge-warn">1ヶ月以上未訪問</span>';
+  }
+  var dates =
+    '<span>登録 <b>' + fmtDate(r.registeredDate) + "</b></span>" +
+    '<span>最終訪問 <b>' + fmtDate(r.lastVisitDate) + "</b></span>" +
+    (overdue && !r.ended ? '<span>最終訪問から<b>' + daysSince(r.lastVisitDate) + '</b>日</span>' : "") +
+    badges;
+  var mapLink = r.mapUrl
+    ? '<a class="map-link" href="' + escapeHtml(r.mapUrl) + '" target="_blank" rel="noopener" data-stop>' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>地図</a>'
+    : "";
+  return '<li class="row' + (r.ended ? " is-ended" : "") + '" data-key="' + escapeHtml(r.key) + '">' +
+    '<button class="stub" type="button" aria-label="管理番号' + pad3(r.no || 0) + 'を編集"><small>管理番号</small>No.' + pad3(r.no || 0) + "</button>" +
+    '<div class="row-main">' +
+      '<h3 class="store">' + escapeHtml(r.storeName) + "</h3>" +
+      (r.note ? '<p class="note">' + escapeHtml(r.note) + "</p>" : "") +
+      '<p class="dates">' + dates + "</p>" +
+    "</div>" +
+    '<div class="row-side">' + thumbHtml(r) + mapLink + "</div>" +
+    "</li>";
+}
+
+var EMPTY = {
+  active: { msg: "提携中の店舗はまだありません。「新規登録」から登録しましょう。", icon: "M12 2a4 4 0 0 0-4 4v1.5a4 4 0 0 0-1.5 3.1v6.9a3.5 3.5 0 0 0 3.5 3.5h4a3.5 3.5 0 0 0 3.5-3.5v-6.9a4 4 0 0 0-1.5-3.1V6a4 4 0 0 0-4-4Z" },
+  overdue: { msg: "1ヶ月以上訪問していない店舗はありません。順調です。", icon: "M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Zm0-15v5l4 2" },
+  ended: { msg: "提携を終了した店舗はありません。", icon: "M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Zm-3.5-13.5 7 7m0-7-7 7" }
+};
+
+function render() {
+  counts();
+  var list = visibleRecords();
+  tabDescEl.textContent = {
+    active: "現在提携中の飲食店の一覧です。管理番号を押すと編集できます。",
+    overdue: "最終訪問日から1ヶ月以上経過した提携中の店舗です。訪問の優先順位が高い順に表示されます。",
+    ended: "提携を終了した店舗の一覧です。"
+  }[currentTab];
+
+  if (!list.length) {
+    rowsEl.innerHTML = '<li class="empty"><svg viewBox="0 0 24 24"><path d="' + EMPTY[currentTab].icon + '"/></svg><p>' + EMPTY[currentTab].msg + "</p></li>";
+    return;
+  }
+  rowsEl.innerHTML = list.map(rowHtml).join("");
+}
+
+/* =====================================================================
+   登録・編集モーダル
+   ===================================================================== */
+var editKey = null;      // null=新規, 文字列=編集
+var draftPhotos = [];
+var draftGeo = null;
+
+function setGeoDisplay() {
+  var res = $("geoResult");
+  if (draftGeo) {
+    $("geoLink").href = draftGeo.url;
+    $("geoLinkText").textContent = draftGeo.url;
+    res.hidden = false;
+  } else {
+    res.hidden = true;
+  }
+}
+
+function renderDraftThumbs() {
+  $("photoThumbs").innerHTML = draftPhotos.map(function (p, i) {
+    return '<div class="thumb-wrap"><img src="' + p + '" alt="写真' + (i + 1) + '">' +
+      '<button class="thumb-del" type="button" data-del="' + i + '" aria-label="この写真を削除">×</button></div>';
+  }).join("");
+}
+
+function openModal(mode, key) {
+  editKey = mode === "edit" ? key : null;
+  draftPhotos = [];
+  draftGeo = null;
+  $("fName").value = "";
+  $("fName").classList.remove("is-error");
+  $("fNote").value = "";
+  $("geoMsg").textContent = "";
+  $("geoMsg").classList.remove("is-error");
+  $("fVisit").value = "";
+
+  if (editKey != null) {
+    var r = byKey(editKey);
+    if (!r) return;
+    $("mTitle").textContent = "編集";
+    $("fName").value = r.storeName;
+    $("fNote").value = r.note || "";
+    draftPhotos = (r.photos || []).slice();
+    if (r.mapUrl) {
+      draftGeo = { url: r.mapUrl, lat: r.lat, lng: r.lng };
+    }
+    $("fieldVisit").hidden = false;
+    $("fVisit").value = r.lastVisitDate || "";
+    $("btnEnd").hidden = !!r.ended;
+    $("btnResume").hidden = !r.ended;
+    $("btnDelete").hidden = false;
+    $("btnSave").textContent = "保存";
+    $("mMeta").innerHTML = "管理番号 <b>No." + pad3(r.no || 0) + "</b>　／　登録日 <b>" + fmtDate(r.registeredDate) + "</b>";
+  } else {
+    $("mTitle").textContent = "新規登録";
+    $("fieldVisit").hidden = true;
+    $("btnEnd").hidden = true;
+    $("btnResume").hidden = true;
+    $("btnDelete").hidden = true;
+    $("btnSave").textContent = "登録";
+    $("mMeta").innerHTML = "管理番号は<b>登録時に自動で採番</b>されます　／　登録日 <b>" + fmtDate(todayStr()) + "</b>（本日）";
+  }
+  setGeoDisplay();
+  renderDraftThumbs();
+  overlay.hidden = false;
+  document.body.style.overflow = "hidden";
+  setTimeout(function () { $("fName").focus(); }, 60);
+}
+
+function closeModal() {
+  overlay.hidden = true;
+  document.body.style.overflow = "";
+}
+
+/* ---------- 位置情報 ---------- */
+$("btnGeo").addEventListener("click", function () {
+  var msg = $("geoMsg");
+  msg.classList.remove("is-error");
+  if (!navigator.geolocation) {
+    msg.textContent = "このブラウザでは位置情報を利用できません。HTTPSで開く必要があります。";
+    msg.classList.add("is-error");
+    return;
+  }
+  msg.textContent = "位置情報を取得中…";
+  navigator.geolocation.getCurrentPosition(function (pos) {
+    var lat = pos.coords.latitude.toFixed(6);
+    var lng = pos.coords.longitude.toFixed(6);
+    draftGeo = { lat: lat, lng: lng, url: "https://www.google.com/maps?q=" + lat + "," + lng };
+    msg.textContent = "取得しました。";
+    setGeoDisplay();
+  }, function (err) {
+    var m = err.code === 1 ? "位置情報の利用が許可されていません。ブラウザの設定で許可してください。"
+          : err.code === 2 ? "位置情報を取得できませんでした。電波の良い場所でお試しください。"
+          : "位置情報の取得がタイムアウトしました。もう一度お試しください。";
+    msg.textContent = m;
+    msg.classList.add("is-error");
+  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 });
+});
+
+$("btnGeoClear").addEventListener("click", function () {
+  draftGeo = null;
+  $("geoMsg").textContent = "";
+  setGeoDisplay();
+});
+
+/* ---------- 写真 ---------- */
+function shrinkImage(file) {
+  return new Promise(function (resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var max = 1024;
+        var scale = Math.min(1, max / Math.max(img.width, img.height));
+        var w = Math.round(img.width * scale), h = Math.round(img.height * scale);
+        var c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        c.getContext("2d").drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL("image/jpeg", 0.65));
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+$("fPhotos").addEventListener("change", function () {
+  var files = Array.prototype.slice.call(this.files);
+  this.value = "";
+  if (!files.length) return;
+  var pending = files.length;
+  files.forEach(function (f) {
+    shrinkImage(f).then(function (dataUrl) {
+      draftPhotos.push(dataUrl);
+      if (--pending === 0) renderDraftThumbs();
+    }).catch(function () {
+      if (--pending === 0) renderDraftThumbs();
+      toast("読み込めないファイルがありました");
+    });
+  });
+});
+
+$("photoThumbs").addEventListener("click", function (e) {
+  var btn = e.target.closest("[data-del]");
+  if (!btn) return;
+  draftPhotos.splice(Number(btn.dataset.del), 1);
+  renderDraftThumbs();
+});
+
+/* ---------- 保存／提携終了／再開 ---------- */
+$("btnSave").addEventListener("click", function () {
+  var name = $("fName").value.trim();
+  if (!name) {
+    $("fName").classList.add("is-error");
+    $("fName").focus();
+    toast("店舗名を入力してください");
+    return;
+  }
+  var note = $("fNote").value.trim();
+  var geo = draftGeo ? { url: draftGeo.url, lat: draftGeo.lat, lng: draftGeo.lng } : null;
+  var photos = draftPhotos.slice();
+
+  if (editKey != null) {
+    var r = byKey(editKey);
+    if (!r) return;
+    if (r.deleted) {
+      closeModal();
+      render();
+      toast("このデータは別端末で削除されています");
+      return;
+    }
+    r.storeName = name;
+    r.note = note;
+    r.mapUrl = geo ? geo.url : "";
+    r.lat = geo ? geo.lat : null;
+    r.lng = geo ? geo.lng : null;
+    r.photos = photos;
+    r.lastVisitDate = $("fVisit").value || r.lastVisitDate;
+    touch(r);
+    if (!saveStorage()) return;
+    closeModal();
+    render();
+    toast("変更を保存しました");
+  } else {
+    var rec = {
+      key: newKey(),
+      no: maxNo() + 1,
+      storeName: name,
+      note: note,
+      mapUrl: geo ? geo.url : "",
+      lat: geo ? geo.lat : null,
+      lng: geo ? geo.lng : null,
+      photos: photos,
+      registeredDate: todayStr(),
+      lastVisitDate: todayStr(),
+      ended: false,
+      endedDate: "",
+      updatedAt: nowIso()
+    };
+    records.push(rec);
+    markDirty(rec.key);
+    if (!saveStorage()) return;
+    closeModal();
+    render();
+    toast("登録しました（管理番号 No." + pad3(rec.no) + "）");
+  }
+  setChip();
+  syncNow(false);
+});
+
+$("btnEnd").addEventListener("click", function () {
+  if (editKey == null) return;
+  var r = byKey(editKey);
+  if (!r) return;
+  if (!confirm("「" + r.storeName + "」との提携を終了しますか？\n終了すると「提携終了」リストに移動します。")) return;
+  r.ended = true;
+  r.endedDate = todayStr();
+  touch(r);
+  if (!saveStorage()) return;
+  closeModal();
+  render();
+  toast("提携を終了しました（No." + pad3(r.no || 0) + "）");
+  syncNow(false);
+});
+
+$("btnResume").addEventListener("click", function () {
+  if (editKey == null) return;
+  var r = byKey(editKey);
+  if (!r) return;
+  if (!confirm("「" + r.storeName + "」との提携を再開しますか？")) return;
+  r.ended = false;
+  r.endedDate = "";
+  touch(r);
+  if (!saveStorage()) return;
+  closeModal();
+  render();
+  toast("提携を再開しました（No." + pad3(r.no || 0) + "）");
+  syncNow(false);
+});
+
+/* 削除（登録ミスなど）。提携終了と異なり一覧から完全に消える。
+   削除フラグ(deleted)を付けて同期することで、他端末にも削除が反映される。 */
+$("btnDelete").addEventListener("click", function () {
+  if (editKey == null) return;
+  var r = byKey(editKey);
+  if (!r) return;
+  if (!confirm("No." + pad3(r.no || 0) + " 「" + r.storeName + "」を削除しますか？\n※提携終了と異なり、一覧から完全に消えます。この操作は取り消せません。")) return;
+  var deletedNo = r.no || 0;
+  r.deleted = true;
+  r.photos = [];   /* 削除済みデータは写真を保持しない */
+  touch(r);
+  renumberAll();
+  if (!saveStorage()) return;
+  closeModal();
+  render();
+  toast("No." + pad3(deletedNo) + " を削除しました（管理番号を詰め直しました）");
+  syncNow(false);
+});
+
+$("btnToday").addEventListener("click", function () {
+  $("fVisit").value = todayStr();
+});
+
+/* =====================================================================
+   設定（共有）モーダル
+   ===================================================================== */
+var GAS_CODE = [
+  '// ============================================================',
+  '//  提携飲食店管理アプリ — 同期サーバー（Google Apps Script）',
+  '//  必要なもの: あなたのGoogleドライブにアップロードした',
+  '//   ・karaoke-partner-manager.html（アプリ本体）',
+  '//  ※データ本体は Drive 内の karaoke_partner_db.json に自動保存されます',
+  '// ============================================================',
+  "var DB_FILE = 'karaoke_partner_db.json';",
+  "var APP_FILE = 'karaoke-partner-manager.html';",
+  '',
+  'function doGet(e) {',
+  "  var action = (e && e.parameter && e.parameter.action) ? String(e.parameter.action) : '';",
+  "  if (action === 'list') {",
+  '    var db = readDb();',
+  '    if (db === null) return jsonOut({ ok: false, error: "db busy" });',
+  '    return jsonOut({ ok: true, records: db.records });',
+  '  }',
+  '  // アプリ本体（HTML）を配信する',
+  '  try {',
+  '    var files = DriveApp.getFilesByName(APP_FILE);',
+  '    if (files.hasNext()) {',
+  "      var html = files.next().getBlob().getDataAsString('UTF-8');",
+  '      var url = ScriptApp.getService().getUrl();',
+  "      var inject = '<script>window.__SYNC_URL__=\"' + url + '\";</' + 'script>';",
+  '      html = html.replace(/<\\/body>/i, inject + "</body>");',
+  '      return ContentService.createTextOutput(html).setMimeType(ContentService.MimeType.HTML);',
+  '    }',
+  "    return ContentService.createTextOutput('ドライブに「' + APP_FILE + '」が見つかりません。アップロードしてください。');",
+  '  } catch (err) {',
+  "    return ContentService.createTextOutput('エラー: ' + err);",
+  '  }',
+  '}',
+  '',
+  'function doPost(e) {',
+  '  try {',
+  '    var body = JSON.parse(e.postData.contents);',
+  "    if (body.action !== 'saveAll') return jsonOut({ ok: false, error: 'unknown action' });",
+  '    var lock = LockService.getScriptLock();',
+  '    lock.waitLock(25000);',
+  '    try {',
+  '      var db = readDb();',
+  '      if (db === null) return jsonOut({ ok: false, error: "db busy" });',
+  '      var map = {};',
+  '      db.records.forEach(function (r) { map[r.key] = r; });',
+  '      (body.records || []).forEach(function (r) {',
+  '        var cur = map[r.key];',
+  "        if (!cur || String(cur.updatedAt || '') < String(r.updatedAt || '')) map[r.key] = r;",
+  '      });',
+  '      db.records = Object.keys(map).map(function (k) { return map[k]; });',
+  '      writeDb(db);',
+  '      return jsonOut({ ok: true, count: db.records.length });',
+  '    } finally {',
+  '      lock.releaseLock();',
+  '    }',
+  '  } catch (err) {',
+  "    return jsonOut({ ok: false, error: String(err) });",
+  '  }',
+  '}',
+  '',
+  'function readDb() {',
+  '  var it = DriveApp.getFilesByName(DB_FILE);',
+  '  if (it.hasNext()) {',
+  '    try {',
+  "      return JSON.parse(it.next().getBlob().getDataAsString('UTF-8'));",
+  '    } catch (e2) {',
+  '      return null;',
+  '    }',
+  '  }',
+  '  return { records: [] };',
+  '}',
+  '',
+  'function writeDb(db) {',
+  '  var json = JSON.stringify(db);',
+  '  var it = DriveApp.getFilesByName(DB_FILE);',
+  '  if (it.hasNext()) {',
+  '    it.next().setContent(json);',
+  '  } else {',
+  "    DriveApp.createFile(Utilities.newBlob(json, 'application/json', DB_FILE));",
+  '  }',
+  '}',
+  '',
+  'function jsonOut(obj) {',
+  '  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);',
+  '}'
+].join("\n");
+
+var uiMode = "gas";
+function setSeg(mode) {
+  uiMode = mode;
+  document.querySelectorAll("#segMode button").forEach(function (b) {
+    b.classList.toggle("is-on", b.dataset.mode === mode);
+  });
+  $("gasFields").hidden = mode !== "gas";
+  $("ghFields").hidden = mode !== "gh";
+}
+function openSettings() {
+  $("sUrl").value = syncUrl;
+  $("gRepo").value = ghCfg.repo;
+  $("gBranch").value = ghCfg.branch;
+  $("gPath").value = ghCfg.path;
+  $("gToken").value = ghCfg.token;
+  var last = lsGet(LASTSYNC_KEY);
+  var lastTxt = "—";
+  if (last) { var d = new Date(last); lastTxt = fmtDate(d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate())) + " " + pad2(d.getHours()) + ":" + pad2(d.getMinutes()); }
+  $("sMeta").innerHTML = "登録件数 <b>" + records.length + "件</b>（未送信 <b>" + dirty.length + "件</b>）　／　最終同期 <b>" + lastTxt + "</b>";
+  if (syncMode === "gh") {
+    $("sStatus").textContent = "接続先：GitHub " + ghCfg.repo + "（" + ghCfg.branch + " ブランチの " + ghCfg.path + "）";
+  } else {
+    $("sStatus").textContent = syncUrl
+      ? "接続先：" + syncUrl
+      : "未接続（この端末だけで使用中）";
+  }
+  $("sAuto").textContent = isConnected()
+    ? "自動同期：オン（約1分ごと・アプリ表示時・回線復帰時）"
+    : "自動同期：オフ（未接続）";
+  setSeg(syncMode === "gh" ? "gh" : "gas");
+  if (!$("gasCode").value) $("gasCode").value = GAS_CODE;
+  settingsOverlay.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function closeSettings() {
+  settingsOverlay.hidden = true;
+  document.body.style.overflow = overlay.hidden ? "" : "hidden";
+}
+
+$("btnSyncSave").addEventListener("click", function () {
+  if (uiMode === "gh") {
+    var repo = $("gRepo").value.trim().replace(/^https?:\/\/github\.com\//i, "").replace(/\.git$/, "").replace(/\/+$/, "");
+    var branch = $("gBranch").value.trim() || "main";
+    var path = $("gPath").value.trim() || "karaoke_partner_db.json";
+    var token = $("gToken").value.trim();
+    if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo)) {
+      toast("リポジトリは「ユーザー名/リポジトリ名」の形式で入力してください");
+      return;
+    }
+    if (!token) {
+      toast("アクセストークンを入力してください");
+      return;
+    }
+    ghCfg = { repo: repo, branch: branch, path: path, token: token };
+    lsSet(GH_KEY, JSON.stringify(ghCfg));
+    syncMode = "gh";
+    lsSet(MODE_KEY, syncMode);
+    setChip();
+    toast("保存しました。接続を確認します…");
+    syncNow(true);
+    return;
+  }
+  var u = $("sUrl").value.trim();
+  if (!/^https:\/\/script\.google\.com\//.test(u)) {
+    toast("ウェブアプリのURL（https://script.google.com/…/exec）を貼り付けてください");
+    return;
+  }
+  syncUrl = u;
+  lsSet(SYNC_KEY, syncUrl);
+  syncMode = "gas";
+  lsSet(MODE_KEY, syncMode);
+  setChip();
+  toast("保存しました。接続を確認します…");
+  syncNow(true);
+});
+
+$("segMode").addEventListener("click", function (e) {
+  var b = e.target.closest("button[data-mode]");
+  if (b) setSeg(b.dataset.mode);
+});
+
+$("btnSyncNow").addEventListener("click", function () { syncNow(true); });
+
+$("btnSyncOff").addEventListener("click", function () {
+  if (!confirm("共有を切り離しますか？（この端末のデータは残ります）")) return;
+  if (syncMode === "gh") {
+    ghCfg = { repo: "", branch: "main", path: "karaoke_partner_db.json", token: "" };
+    lsSet(GH_KEY, JSON.stringify(ghCfg));
+  } else {
+    syncUrl = "";
+    lsSet(SYNC_KEY, "");
+  }
+  syncMode = "";
+  lsSet(MODE_KEY, "");
+  lastError = false;
+  setChip();
+  openSettings();
+  toast("切り離しました（この端末だけで使用中）");
+});
+
+$("btnPushAll").addEventListener("click", function () {
+  if (!records.length) { toast("送信するデータがありません"); return; }
+  if (!confirm("この端末の全データ（" + records.length + "件）を共有先に送信しますか？")) return;
+  records.forEach(function (r) { touch(r); });
+  saveStorage(true);
+  syncNow(true);
+});
+
+$("btnCopyGas").addEventListener("click", function () {
+  var ta = $("gasCode");
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(function () {
+      toast("コピーしました");
+    }, function () { fallbackCopy(ta); });
+  } else {
+    fallbackCopy(ta);
+  }
+});
+function fallbackCopy(ta) {
+  ta.hidden = false;
+  ta.select();
+  try {
+    document.execCommand("copy");
+    toast("コピーしました");
+  } catch (e) {
+    toast("コピーできませんでした。手動で選択してください");
+  }
+  ta.hidden = false;
+}
+
+/* ---------- 書き出し・読み込み ---------- */
+$("btnExport").addEventListener("click", function () {
+  var payload = { app: "karaoke-partner-manager", version: 2, exportedAt: nowIso(), records: records };
+  var blob = new Blob([JSON.stringify(payload, null, 1)], { type: "application/json" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "karaoke_partners_" + todayStr() + ".json";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  toast("書き出しました");
+});
+
+$("importFile").addEventListener("change", function () {
+  var file = this.files && this.files[0];
+  this.value = "";
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function () {
+    var data;
+    try { data = JSON.parse(reader.result); } catch (e) { toast("JSONファイルを読み込めません"); return; }
+    var list = data && data.records;
+    if (!Array.isArray(list) || !list.length) { toast("データが含まれていません"); return; }
+    list.forEach(function (s) {
+      if (!s || !s.key) return;
+      var l = byKey(s.key);
+      if (!l) { records.push(s); markDirty(s.key); }
+      else if (String(s.updatedAt || "") > String(l.updatedAt || "")) {
+        Object.keys(s).forEach(function (k) { l[k] = s[k]; });
+        markDirty(s.key);
+      }
+    });
+    dedupeNos();
+    renumberAll();
+    saveStorage();
+    render();
+    setChip();
+    syncNow(false);
+    toast("読み込みました（" + list.length + "件）");
+  };
+  reader.readAsText(file);
+});
+
+/* =====================================================================
+   イベント
+   ===================================================================== */
+$("btnNew").addEventListener("click", function () { openModal("new"); });
+$("btnClose").addEventListener("click", closeModal);
+$("btnCancel").addEventListener("click", closeModal);
+overlay.addEventListener("click", function (e) { if (e.target === overlay) closeModal(); });
+
+$("btnSettings").addEventListener("click", openSettings);
+$("syncChip").addEventListener("click", openSettings);
+$("btnSetClose").addEventListener("click", closeSettings);
+$("btnSetDone").addEventListener("click", closeSettings);
+settingsOverlay.addEventListener("click", function (e) { if (e.target === settingsOverlay) closeSettings(); });
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    if (!$("lightbox").hidden) { $("lightbox").hidden = true; return; }
+    if (!settingsOverlay.hidden) { closeSettings(); return; }
+    if (!overlay.hidden) closeModal();
+  }
+});
+
+$("tabs").addEventListener("click", function (e) {
+  var tab = e.target.closest(".tab");
+  if (!tab) return;
+  currentTab = tab.dataset.tab;
+  document.querySelectorAll(".tab").forEach(function (t) { t.classList.toggle("is-active", t === tab); });
+  render();
+});
+
+rowsEl.addEventListener("click", function (e) {
+  var photoBtn = e.target.closest("[data-photo]");
+  if (photoBtn) {
+    e.stopPropagation();
+    var li = photoBtn.closest(".row");
+    var rec = byKey(li.dataset.key);
+    if (rec) openLightbox(rec.photos[Number(photoBtn.dataset.photo)], rec.storeName);
+    return;
+  }
+  if (e.target.closest("[data-stop]")) return; // 地図リンクはそのまま開かせる
+  var row = e.target.closest(".row");
+  if (row) openModal("edit", row.dataset.key);
+});
+
+/* ---------- lightbox / toast ---------- */
+function openLightbox(src, cap) {
+  $("lightboxImg").src = src;
+  $("lightboxCap").textContent = cap || "";
+  $("lightbox").hidden = false;
+}
+$("lightbox").addEventListener("click", function () { this.hidden = true; });
+
+var toastTimer = null;
+function toast(msg) {
+  var t = $("toast");
+  t.textContent = msg;
+  t.classList.add("is-show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.classList.remove("is-show"); }, 2600);
+}
+
+/* =====================================================================
+   初期化
+   ===================================================================== */
+var currentTab = "active";
+loadRecords(function () {
+  migrate();
+  render();
+  setChip();
+  if (isConnected()) syncNow(false);
+});
+
+/* ---------- テスト用フック（動作に影響なし） ---------- */
+window.__test = {
+  getRecords: function () { return records; },
+  setRecords: function (arr) { records = arr || []; },
+  reset: function (arr) { records = arr || []; dirty = []; },
+  byKey: byKey,
+  maxNo: maxNo,
+  newKey: newKey,
+  touch: touch,
+  migrate: migrate,
+  dedupeNos: dedupeNos,
+  mergeFromServer: mergeFromServer,
+  overOneMonth: overOneMonth,
+  getDirty: function () { return dirty; },
+  b64encodeUtf8: b64encodeUtf8,
+  b64decodeUtf8: b64decodeUtf8,
+  visibleRecords: function () { return visibleRecords(); },
+  renumberAll: renumberAll
+};
+</script>
+</body>
+</html>
